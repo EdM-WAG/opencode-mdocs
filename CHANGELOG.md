@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-06-03
+
+### Added
+
+- **Configurable standalone wiki categories** — `WikiManager` and `createPlugin` now accept a `standaloneCategories` option (e.g. `createPlugin(baseDir, { standaloneCategories: ['repo', 'system'] })`) to mark categories as project-wide and exempt them from the orphan-wiki warning without code changes.
+- **`lifecycle: stable` opt-out for orphan warnings** — wiki entries with `lifecycle: stable` are treated as settled knowledge that stands on its own and are not flagged as orphans.
+- **`sources` provenance alias** — wiki entries can use `sources: [initiative-id]` interchangeably with `source_initiatives: [initiative-id]`.
+- **Public type exports** — `MdocsPluginOptions` and `WikiManagerOptions` are re-exported from the package entry point for downstream consumers.
+- **Linked wiki INDEX format** — per-category `INDEX.md` entries now render as `- [Title](id.md)`, matching the root wiki INDEX style and making the index clickable / unambiguous.
+- **Dedicated opencode runtime entrypoint** — package consumers can configure `"plugin": ["opencode-mdocs/plugin"]`, while the package root remains available for public API imports.
+
+### Changed
+
+- **Orphan-detection rule** — the consistency checker now matches INDEX entries to on-disk files by `{filename, frontmatter id, normalized frontmatter title}` instead of comparing title-slugs to filenames.
+- **Orphan-detection rule, secondary** — a wiki entry's self-claimed `related_initiatives` no longer silences the orphan warning unless some initiative's `related_wiki` actually points back.
+- **Schema docs** — `mdocs/wiki/architecture/plugin-design-spec.md` now has a complete Wiki Entry Format reference table and an Orphan Detection subsection documenting all four reference conditions.
+
+### Fixed
+
+- `WikiManager.checkConsistency()` no longer reports false-positive `missing`/`orphan` pairs for wiki entries whose title-derived slug differs from their filename or frontmatter id.
+- Local dogfooding and package consumers now load a runtime-only opencode plugin module, preventing opencode from treating public API exports like `WikiManager` as additional plugin candidates.
+
+### Tests
+
+- 4 new tests in `src/__tests__/wiki.test.ts` cover the linked INDEX format, id-≠-filename, title-only matches, and orphan regression.
+- Added runtime-entrypoint regression coverage for `opencode-mdocs/plugin` custom tool registration.
+- 11/11 suites, 178/178 tests pass.
+
 ## [1.2.0] - 2026-06-01
 
 ### Added
