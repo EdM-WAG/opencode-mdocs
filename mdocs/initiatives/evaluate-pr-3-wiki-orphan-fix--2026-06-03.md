@@ -1,12 +1,12 @@
 ---
 id: "evaluate-pr-3-wiki-orphan-fix"
 title: "Evaluate and Merge PR #3: Wiki Orphan Warning Fix"
-status: "active"
+status: "done"
 created: "2026-06-03"
 updated: "2026-06-03"
 owner: "bbaaxx"
 tags: []
-related_wiki: []
+related_wiki: ["architecture/plugin-design-spec"]
 priority: "medium"
 ---
 
@@ -25,9 +25,6 @@ Evaluate community PR #3 (https://github.com/bbaaxx/opencode-mdocs/pull/3) from 
 - `sources` field fallback: minor, backward-compat improvement. Useful if a future agent writes `sources` instead of `source_initiatives`, but `source_initiatives` already works correctly.
 - "Global categories" exemption: targets a wiki taxonomy that doesn't exist in this repo. Looks like the contributor assumed a different category scheme (likely from a generic wiki template).
 - ### Action taken (2026-06-03)
-Posted a formal `CHANGES_REQUESTED` review on PR #3 (https://github.com/bbaaxx/opencode-mdocs/pull/3) with the drafted comment. Review body explains the category-list mismatch (zero overlap with this repo's actual wiki subdirectories), notes that `mdocs_validate` on main is already clean, and suggests a redesign that reuses the existing `lifecycle: stable` field as the opt-out mechanism (consistent with how the linter already treats stable entries in `src/linter.ts:127-134`). A code sketch is included, plus a note about documenting `sources` in the schema wiki entry (`mdocs/wiki/architecture/mdocs-tool-gates`) instead of README-only.
-
-### Status
-Waiting for the contributor to respond with either (a) a redesigned PR, (b) a concrete `mdocs_validate` warning from this repo that the original code would silence, or (c) a request to close the PR. Initiative stays `active` until one of those lands.
+- [2026-06-03T18:43:46.770Z] Marked done via mdocs command
 
 ## Artifacts
