@@ -4,7 +4,7 @@ title: "Original Plugin Design Spec"
 category: "architecture"
 created: "2026-05-27"
 updated: "2026-06-03"
-related_initiatives: ["install-mdocs","align-implementation-with-philosophy","fix-local-dogfooding-agent-discovery","fix-v1-opencode-compatibility","evaluate-pr-3-wiki-orphan-fix","fix-wiki-index-consistency-check","fix-opencode-runtime-tool-registration"]
+related_initiatives: ["install-mdocs","align-implementation-with-philosophy","fix-local-dogfooding-agent-discovery","fix-v1-opencode-compatibility","evaluate-pr-3-wiki-orphan-fix","fix-wiki-index-consistency-check","fix-opencode-runtime-tool-registration","prepare-v1-3-0-release"]
 tags: ["blueprint","architecture","design","history"]
 lifecycle: "stable"
 knowledge_type: "historical-blueprint"
@@ -356,3 +356,4 @@ This proves the system works and serves as living documentation.
 - evaluate-pr-3-wiki-orphan-fix
 - fix-wiki-index-consistency-check
 - fix-opencode-runtime-tool-registration
+- prepare-v1-3-0-release
