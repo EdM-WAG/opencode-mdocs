@@ -59,11 +59,17 @@ In your project's `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-mdocs/plugin"]
+  "plugin": ["opencode-mdocs"]
 }
 ```
 
 That's it — the plugin auto-registers the agent and skills paths on startup.
+
+Programmatic API consumers can import managers from the API subpath:
+
+```ts
+import { createPlugin, WikiManager } from 'opencode-mdocs/api';
+```
 
 ## First Run
 

@@ -4,7 +4,7 @@ title: "Opencode Custom Tool Result Contract"
 category: "developer"
 created: "2026-05-31"
 updated: "2026-06-03"
-related_initiatives: ["fix-mdocs-first-activation-hook-error","fix-opencode-runtime-tool-registration"]
+related_initiatives: ["fix-mdocs-first-activation-hook-error","fix-opencode-runtime-tool-registration","fix-v1-3-0-agent-discovery-regression"]
 tags: ["opencode","plugin","custom-tools","tool-result","debugging"]
 lifecycle: "stable"
 knowledge_type: "fix-pattern"
@@ -51,3 +51,4 @@ Also provide explicit `args` schemas on custom tools so opencode can render and 
 
 - fix-mdocs-first-activation-hook-error
 - fix-opencode-runtime-tool-registration
+- fix-v1-3-0-agent-discovery-regression

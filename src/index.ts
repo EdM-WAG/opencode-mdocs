@@ -22,6 +22,3 @@ function wrapToolResults(plugin: any) {
 export default (async ({ client, project, directory }: { client: any; project: any; directory: string }) => {
   return wrapToolResults(createPlugin(directory));
 }) satisfies any;
-
-export { createPlugin, type MdocsPluginOptions } from './plugin';
-export { WikiManager, type WikiManagerOptions } from './wiki';

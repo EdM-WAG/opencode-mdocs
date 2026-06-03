@@ -17,6 +17,7 @@
 - **Add opencode-mdocs to OpenCode Ecosystem Directory** (active) — add-opencode-mdocs-to-opencode-ecosystem--2026-05-31.md — 2026-05-31 — [documentation, opencode, ecosystem, pr, directory]
 - **Evaluate and Merge PR #3: Wiki Orphan Warning Fix** (done) — evaluate-pr-3-wiki-orphan-fix--2026-06-03.md — 2026-06-03 — []
 - **Add Validation for Initiatives and Wiki References** (done) — add-initiatives-wiki-validation--2026-05-29.md — 2026-05-29 — [enhancement, validation, initiatives, wiki, integrity]
+- **Fix v1.3.0 Agent Discovery Regression** (active) — fix-v1-3-0-agent-discovery-regression--2026-06-03.md — 2026-06-03 — [bug, release-regression, v1.3.0, opencode, agent, packaging]
 - **Add Cross-Link Graph Linter Rules** (done) — add-cross-link-graph-linter--2026-05-28.md — 2026-05-28 — [phase-1, linter, graph, links, quality]
 - **Add Audit Log and Event History** (done) — add-audit-log-and-event-history--2026-05-27.md — 2026-05-27 — [enhancement, observability, history]
 - **Upgrade Dispatch into Memory Retrieval Assembly** (done) — upgrade-dispatch-memory-retrieval--2026-05-28.md — 2026-05-28 — [phase-1, dispatch, memory, retrieval, subagent]

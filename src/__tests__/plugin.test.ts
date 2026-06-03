@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import pluginDefault from '../index';
+import * as packageRoot from '../index';
+import * as apiRoot from '../api';
 import opencodePlugin from '../opencode';
 import { createPlugin } from '../plugin';
 import { InitiativeManager } from '../initiative';
@@ -1127,6 +1129,15 @@ Durable memory retrieval should include snippets for fresh agents.
     const hooks = await pluginDefault({ client: {}, project: {}, directory: testDir });
 
     expect((hooks as any).tool.mdocs_status).toBeDefined();
+  });
+
+  test('package root only exposes default plugin for opencode loading', () => {
+    expect(Object.keys(packageRoot)).toEqual(['default']);
+  });
+
+  test('public API exports live on api subpath', () => {
+    expect((apiRoot as any).createPlugin).toBe(createPlugin);
+    expect((apiRoot as any).WikiManager).toBeDefined();
   });
 
   test('opencode runtime entrypoint exposes custom tools', async () => {

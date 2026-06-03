@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-06-03
+
+### Fixed
+
+- Restored backward-compatible opencode plugin loading for existing configs using `"plugin": ["opencode-mdocs"]`. The package root now exposes only the default plugin entrypoint so opencode does not try to execute public API classes such as `WikiManager` as plugins.
+- Moved programmatic public API imports to `opencode-mdocs/api` (`createPlugin`, `WikiManager`, and their option types), keeping plugin runtime loading separate from library API usage.
+- Corrected README consumer setup to use `"plugin": ["opencode-mdocs"]`; the previously documented `opencode-mdocs/plugin` subpath is not accepted by opencode's npm plugin installer.
+
+### Tests
+
+- Added regression coverage that the package root only exposes the default plugin for opencode loading and that public API exports are available from the API subpath.
+- Verified a packed install in a clean fixture loads the patched root plugin and lists `mdocs-orchestrator` via `opencode debug agent` when configured with `"plugin": ["opencode-mdocs"]`-equivalent file loading.
+
 ## [1.3.0] - 2026-06-03
 
 ### Added
