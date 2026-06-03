@@ -1,15 +1,15 @@
 ---
 id: "prepare-v1-3-0-release"
 title: "Prepare v1.3.0 Release: Validate, Verify, and Ship the PR #3 + Wiki INDEX Fix"
-status: "active"
+status: "done"
 created: "2026-06-03"
 updated: "2026-06-03"
 owner: "bbaaxx"
 tags: ["release", "v1.3.0", "validation", "handoff"]
-related_wiki: ["release/v1-2-0-readiness", "testing/new-features-playbook", "architecture/plugin-design-spec"]
+related_wiki: ["release/v1-2-0-readiness", "testing/new-features-playbook", "architecture/plugin-design-spec", "release/v1-3-0-readiness"]
 priority: "high"
-phase: "verify"
-next_action: "Agent picking this up: run the handoff prompt below end-to-end. Do not skip the validation gates."
+phase: "done"
+next_action: "No follow-up required; v1.3.0 is tagged, published to npm, and released on GitHub."
 ---
 
 ## Objective
@@ -241,3 +241,5 @@ After the release is created, visit the URL `gh release view v1.3.0 --json url -
 
 - [2026-06-03T19:08:00Z] Created this initiative to hand off validation, verification, and v1.3.0 release. References the PR #3 work (merged at 91fadb6) and the wiki INDEX consistency fix (committed at 5aaab77).
 - [2026-06-03T19:24:00Z] Runtime custom tool registration fix was committed separately as `7e32d33` and is included in the v1.3.0 release scope. Root cause: opencode loaded `dist/index.js` and treated public API exports as plugin candidates; fix adds `dist/opencode.js` runtime entrypoint and package export `opencode-mdocs/plugin`.
+- [2026-06-03T19:40:00Z] Completed v1.3.0 release. Validation passed: 11 suites / 178 tests, build clean, mdocs_validate clean, mdocs_index_check consistent, package smoke passed. Pushed main and tag `v1.3.0`. User published npm package with 2FA; verified `npm view opencode-mdocs version` = `1.3.0`. Created GitHub release https://github.com/bbaaxx/opencode-mdocs/releases/tag/v1.3.0 and release readiness wiki `release/v1-3-0-readiness`.
+- [2026-06-03T19:40:00Z] Marked done via mdocs command.

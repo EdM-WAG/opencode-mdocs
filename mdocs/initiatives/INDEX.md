@@ -12,7 +12,7 @@
 - **Fix opencode Runtime Custom Tool Registration** (done) — fix-opencode-runtime-tool-registration--2026-06-03.md — 2026-06-03 — [bug, opencode, plugin, custom-tools, runtime]
 - **Add Full-Text Search Across Initiatives and Wiki** (done) — add-full-text-search--2026-05-27.md — 2026-05-27 — [enhancement, search, discovery]
 - **Fix Local Dogfooding Agent and Skills Discovery** (done) — fix-local-dogfooding-agent-discovery--2026-05-27.md — 2026-05-27 — [bug, dogfooding, local-development, agent, config]
-- **Prepare v1.3.0 Release: Validate, Verify, and Ship the PR #3 + Wiki INDEX Fix** (active) — prepare-v1-3-0-release--2026-06-03.md — 2026-06-03 — [release, v1.3.0, validation, handoff]
+- **Prepare v1.3.0 Release: Validate, Verify, and Ship the PR #3 + Wiki INDEX Fix** (done) — prepare-v1-3-0-release--2026-06-03.md — 2026-06-03 — [release, v1.3.0, validation, handoff]
 - **Add mdocs Linter for Handoff Quality Gates** (done) — add-mdocs-linter-for-handoff-quality--2026-05-27.md — 2026-05-27 — [enhancement, quality, automation, linting]
 - **Add opencode-mdocs to OpenCode Ecosystem Directory** (active) — add-opencode-mdocs-to-opencode-ecosystem--2026-05-31.md — 2026-05-31 — [documentation, opencode, ecosystem, pr, directory]
 - **Evaluate and Merge PR #3: Wiki Orphan Warning Fix** (done) — evaluate-pr-3-wiki-orphan-fix--2026-06-03.md — 2026-06-03 — []
