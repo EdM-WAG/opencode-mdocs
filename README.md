@@ -192,6 +192,8 @@ tags: [plugin, architecture]
 The plugin follows a plugin-centric architecture...
 ```
 
+Wiki entries accept both `sources: [initiative-id]` and `source_initiatives: [initiative-id]` for provenance (the two are interchangeable aliases). Two mechanisms suppress the "not referenced by any initiative" orphan warning: set `lifecycle: stable` on an individual entry to mark it as settled knowledge that stands alone, or pass `standaloneCategories` (e.g. `['repo', 'system']`) to `createPlugin(...)` or `new WikiManager(...)` to mark an entire category as project-wide. See the Wiki Entry Format section of `mdocs/wiki/architecture/plugin-design-spec.md` for the full frontmatter schema.
+
 **Wiki stub generation** — When an initiative references a wiki entry that doesn't exist yet, the `wiki.stub` command auto-creates it with a default template (Overview, Details, References sections). This prevents broken links and gives agents a starting point for documentation.
 
 **Bidirectional links** — When you link an initiative to a wiki entry, the wiki automatically gets a `## Referenced By` section listing all linking initiatives. The `wiki.link` command updates both sides atomically, and `wiki.xref` creates cross-references between wiki entries.
