@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import pluginDefault from '../index';
+import opencodePlugin from '../opencode';
 import { createPlugin } from '../plugin';
 import { InitiativeManager } from '../initiative';
 
@@ -1126,6 +1127,17 @@ Durable memory retrieval should include snippets for fresh agents.
     const hooks = await pluginDefault({ client: {}, project: {}, directory: testDir });
 
     expect((hooks as any).tool.mdocs_status).toBeDefined();
+  });
+
+  test('opencode runtime entrypoint exposes custom tools', async () => {
+    expect(typeof opencodePlugin).toBe('function');
+
+    const hooks = await opencodePlugin({ client: {}, project: {}, directory: testDir });
+
+    expect((hooks as any).tool.mdocs_status).toBeDefined();
+    expect((hooks as any).tool.mdocs_dispatch).toBeDefined();
+    const result = await (hooks as any).tool.mdocs_status.execute({});
+    expect(typeof result.output).toBe('string');
   });
 
   test('mdocs_index_check returns consistent for clean repo', async () => {

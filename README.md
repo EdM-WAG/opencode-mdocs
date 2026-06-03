@@ -44,7 +44,7 @@ Create `opencode.json` in the project root:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["./dist/index.js"]
+  "plugin": ["./dist/opencode.js"]
 }
 ```
 
@@ -59,7 +59,7 @@ In your project's `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-mdocs"]
+  "plugin": ["opencode-mdocs/plugin"]
 }
 ```
 

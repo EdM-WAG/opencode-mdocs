@@ -26,6 +26,16 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./plugin": {
+      "types": "./dist/opencode.d.ts",
+      "default": "./dist/opencode.js"
+    }
+  },
   "scripts": {
     "build": "rm -rf dist && tsc",
     "test": "jest",
