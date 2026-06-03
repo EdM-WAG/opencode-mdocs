@@ -240,3 +240,4 @@ After the release is created, visit the URL `gh release view v1.3.0 --json url -
 ## Progress Log
 
 - [2026-06-03T19:08:00Z] Created this initiative to hand off validation, verification, and v1.3.0 release. References the PR #3 work (merged at 91fadb6) and the wiki INDEX consistency fix (committed at 5aaab77).
+- [2026-06-03T19:24:00Z] Runtime custom tool registration fix was committed separately as `7e32d33` and is included in the v1.3.0 release scope. Root cause: opencode loaded `dist/index.js` and treated public API exports as plugin candidates; fix adds `dist/opencode.js` runtime entrypoint and package export `opencode-mdocs/plugin`.
