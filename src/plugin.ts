@@ -3,7 +3,7 @@ import * as path from 'path';
 import { z } from 'zod';
 import { MdocsManager } from './mdocs';
 import { InitiativeManager } from './initiative';
-import { WikiManager } from './wiki';
+import { WikiManager, type WikiManagerOptions } from './wiki';
 import { WorkflowEngine } from './workflow';
 import { SubagentAssembler } from './subagent';
 import { MdocsLinter } from './linter';
@@ -19,11 +19,18 @@ function slugify(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-export function createPlugin(baseDir: string) {
+export interface MdocsPluginOptions {
+  standaloneCategories?: string[];
+  wiki?: WikiManagerOptions;
+}
+
+export function createPlugin(baseDir: string, options: MdocsPluginOptions = {}) {
   const mdocsRoot = path.join(baseDir, 'mdocs');
   const mdocs = new MdocsManager(mdocsRoot);
   const initiatives = new InitiativeManager(mdocsRoot);
-  const wiki = new WikiManager(mdocsRoot);
+  const wiki = new WikiManager(mdocsRoot, {
+    standaloneCategories: options.wiki?.standaloneCategories ?? options.standaloneCategories
+  });
     const workflow = new WorkflowEngine(mdocsRoot);
     const assembler = new SubagentAssembler();
     const search = new SearchEngine(mdocsRoot);

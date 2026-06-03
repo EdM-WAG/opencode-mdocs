@@ -1,12 +1,18 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { WikiEntry, parseFrontmatter } from './types';
+import { parseFrontmatter, type WikiEntry } from './types';
+
+export interface WikiManagerOptions {
+  standaloneCategories?: string[];
+}
 
 export class WikiManager {
   private dir: string;
+  private standaloneCategories: Set<string>;
 
-  constructor(baseDir: string) {
+  constructor(baseDir: string, options: WikiManagerOptions = {}) {
     this.dir = path.join(baseDir, 'wiki');
+    this.standaloneCategories = new Set((options.standaloneCategories || []).map(category => this.sanitizeName(category)));
     fs.mkdirSync(this.dir, { recursive: true });
   }
 
@@ -96,7 +102,11 @@ export class WikiManager {
       lifecycle: front.lifecycle || undefined,
       knowledgeType: front.knowledge_type || undefined,
       confidence: front.confidence || undefined,
-      sourceInitiatives: Array.isArray(front.source_initiatives) ? front.source_initiatives : undefined,
+      sourceInitiatives: Array.isArray(front.source_initiatives)
+        ? front.source_initiatives
+        : Array.isArray(front.sources)
+          ? front.sources
+          : undefined,
       supersedes: Array.isArray(front.supersedes) ? front.supersedes : undefined,
       relatedWiki: Array.isArray(front.related_wiki) ? front.related_wiki : undefined
     };
@@ -381,7 +391,11 @@ tags: []
           if (!entry.id) errors.push(`${relativeName} missing id`);
           if (!entry.title) errors.push(`${relativeName} missing title`);
           if (!entry.category) errors.push(`${relativeName} missing category`);
-          if (entry.id && entry.category && !referencedWiki.has(`${entry.category}/${entry.id}`)) {
+          const hasSourceInitiatives = Array.isArray(entry.sourceInitiatives) && entry.sourceInitiatives.length > 0;
+          const isStable = entry.lifecycle === 'stable';
+          const isStandaloneCategory = this.standaloneCategories.has(entry.category);
+          const isReferencedByInitiative = entry.id && entry.category && referencedWiki.has(`${entry.category}/${entry.id}`);
+          if (entry.id && entry.category && !isStable && !isStandaloneCategory && !hasSourceInitiatives && !isReferencedByInitiative) {
             warnings.push(`${relativeName} is not referenced by any initiative`);
           }
         } catch (err: any) {

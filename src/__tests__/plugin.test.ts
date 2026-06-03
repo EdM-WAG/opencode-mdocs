@@ -619,6 +619,31 @@ Existing file
     expect(result.graph.results).toEqual(expect.any(Array));
   });
 
+  test('mdocs_validate respects configured standalone wiki categories', async () => {
+    const plugin = createPlugin(testDir, { standaloneCategories: ['repo'] });
+    (plugin as any).tool.mdocs_init.execute();
+
+    const wikiDir = path.join(testDir, 'mdocs', 'wiki', 'repo');
+    fs.mkdirSync(wikiDir, { recursive: true });
+    fs.writeFileSync(path.join(wikiDir, 'example.md'), `---
+id: "example"
+title: "Example"
+category: "repo"
+created: "2026-06-03"
+updated: "2026-06-03"
+tags: []
+---
+
+Repository knowledge.
+`, 'utf8');
+
+    const result = await (plugin as any).tool.mdocs_validate.execute();
+
+    expect(result.wiki.warnings).not.toEqual(expect.arrayContaining([
+      expect.stringContaining('repo/example.md is not referenced by any initiative')
+    ]));
+  });
+
   test('mdocs_validate tool and mdocs validate command return combined validation results', async () => {
     const plugin = createPlugin(testDir);
     (plugin as any).tool.mdocs_init.execute();

@@ -277,6 +277,115 @@ Content`, 'utf8');
     ]));
   });
 
+  test('validate does not warn for stable wiki entries without initiative references', () => {
+    const manager = new WikiManager(testDir);
+    manager.create({
+      id: 'example-repo',
+      title: 'Example Repo',
+      category: 'repo',
+      created: '2026-06-03',
+      updated: '2026-06-03',
+      relatedInitiatives: [],
+      tags: [],
+      lifecycle: 'stable',
+      content: 'Global repo knowledge'
+    });
+
+    const result = manager.validate();
+
+    expect(result.valid).toBe(true);
+    expect(result.warnings).not.toEqual(expect.arrayContaining([
+      expect.stringContaining('repo/example-repo.md is not referenced by any initiative')
+    ]));
+  });
+
+  test('validate does not warn for configured standalone category entries', () => {
+    const manager = new WikiManager(testDir, { standaloneCategories: ['repo'] });
+    manager.create({
+      id: 'example-repo',
+      title: 'Example Repo',
+      category: 'repo',
+      created: '2026-06-03',
+      updated: '2026-06-03',
+      relatedInitiatives: [],
+      tags: [],
+      content: 'Global repo knowledge'
+    });
+
+    const result = manager.validate();
+
+    expect(result.valid).toBe(true);
+    expect(result.warnings).not.toEqual(expect.arrayContaining([
+      expect.stringContaining('repo/example-repo.md is not referenced by any initiative')
+    ]));
+  });
+
+  test('validate does not warn when wiki entry has sources provenance', () => {
+    const manager = new WikiManager(testDir);
+    const categoryDir = path.join(testDir, 'wiki', 'initiative');
+    fs.mkdirSync(categoryDir, { recursive: true });
+    fs.writeFileSync(path.join(categoryDir, 'example-initiative.md'), `---
+id: "example-initiative"
+title: "Example Initiative"
+category: "initiative"
+created: "2026-06-03"
+updated: "2026-06-03"
+sources: [example-initiative]
+---
+
+Initiative summary.
+`, 'utf8');
+
+    const result = manager.validate();
+
+    expect(result.valid).toBe(true);
+    expect(result.warnings).not.toEqual(expect.arrayContaining([
+      expect.stringContaining('initiative/example-initiative.md is not referenced by any initiative')
+    ]));
+  });
+
+  test('validate still warns for non-global wiki entries without provenance', () => {
+    const manager = new WikiManager(testDir);
+    manager.create({
+      id: 'orphan-initiative',
+      title: 'Orphan Initiative',
+      category: 'initiative',
+      created: '2026-06-03',
+      updated: '2026-06-03',
+      relatedInitiatives: [],
+      tags: [],
+      content: 'No provenance'
+    });
+
+    const result = manager.validate();
+
+    expect(result.valid).toBe(true);
+    expect(result.warnings).toEqual(expect.arrayContaining([
+      expect.stringContaining('initiative/orphan-initiative.md is not referenced by any initiative')
+    ]));
+  });
+
+  test('validate still warns when only wiki entry metadata lists related initiatives', () => {
+    const manager = new WikiManager(testDir);
+    manager.create({
+      id: 'metadata-only',
+      title: 'Metadata Only',
+      category: 'architecture',
+      created: '2026-06-03',
+      updated: '2026-06-03',
+      relatedInitiatives: ['missing-initiative'],
+      tags: [],
+      content: 'No initiative related_wiki points here'
+    });
+
+    const result = manager.validate();
+
+    expect(result.valid).toBe(true);
+    expect(result.warnings).toEqual(expect.arrayContaining([
+      expect.stringContaining('architecture/metadata-only.md is not referenced by any initiative')
+    ]));
+  });
+
   test('validate does not warn when wiki entry is referenced by an initiative', () => {
     const manager = new WikiManager(testDir);
     manager.create({

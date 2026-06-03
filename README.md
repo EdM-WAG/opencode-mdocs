@@ -192,6 +192,8 @@ tags: [plugin, architecture]
 The plugin follows a plugin-centric architecture...
 ```
 
+Wiki entries can also use `sources: [initiative-id]` or `source_initiatives: [initiative-id]` to record provenance. Settled standalone knowledge should set `lifecycle: stable`; validation will not warn when stable entries are not referenced by an initiative. Programmatic consumers can also pass `{ standaloneCategories: ['repo'] }` to `createPlugin(...)` or `new WikiManager(...)` for project-specific standalone categories.
+
 **Wiki stub generation** — When an initiative references a wiki entry that doesn't exist yet, the `wiki.stub` command auto-creates it with a default template (Overview, Details, References sections). This prevents broken links and gives agents a starting point for documentation.
 
 **Bidirectional links** — When you link an initiative to a wiki entry, the wiki automatically gets a `## Referenced By` section listing all linking initiatives. The `wiki.link` command updates both sides atomically, and `wiki.xref` creates cross-references between wiki entries.
