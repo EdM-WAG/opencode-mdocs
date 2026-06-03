@@ -34,6 +34,7 @@
 - **Grant Agent Autonomy Over mdocs Knowledge** (done) — mdocs-autonomy--2026-05-27.md — 2026-05-27 — [enhancement, workflow, permissions]
 - **Prepare v1.1.0 Release** (done) — prepare-v1-1-0-release--2026-05-31.md — 2026-05-31 — [release, v1.1.0]
 - **Prepare v1.2.0 Release** (done) — prepare-v1-2-0-release--2026-06-01.md — 2026-06-01 — [release, v1.2.0]
+- **Prepare v1.3.0 Release: Validate, Verify, and Ship the PR #3 + Wiki INDEX Fix** (active) — prepare-v1-3-0-release--2026-06-03.md — 2026-06-03 — [release, v1.3.0, validation, handoff]
 - **Prepare v1 Release** (done) — prepare-v1-release--2026-05-27.md — 2026-05-27 — [release, v1, milestone, quality]
 - **Remove Default Model from mdocs-orchestrator Agent** (done) — remove-default-model--2026-05-27.md — 2026-05-27 — [agent, config, model]
 - **Upgrade Dispatch into Memory Retrieval Assembly** (done) — upgrade-dispatch-memory-retrieval--2026-05-28.md — 2026-05-28 — [phase-1, dispatch, memory, retrieval, subagent]
