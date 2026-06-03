@@ -445,30 +445,56 @@ tags: []
 
       const catIndexMtime = fs.statSync(catIndexPath).mtimeMs;
       const catContent = fs.readFileSync(catIndexPath, 'utf8');
-      // Extract entry IDs from category index: - title or - id
-      const listedEntries = new Set(Array.from(catContent.matchAll(/^- (.+)$/gm)).map(m => {
-        const line = m[1].trim();
-        // Could be "- Title" or "- id" — we check against filenames
-        return line.toLowerCase().replace(/\s+/g, '-');
-      }));
-      const actualEntries = new Set(catFiles.map(f => f.replace('.md', '')));
 
-      for (const listed of listedEntries) {
-        if (!actualEntries.has(listed)) {
-          missing.push(`wiki/${category}/${listed}.md`);
+      // Build set of known IDs from the INDEX. Prefer the link target (`[Title](id.md)`);
+      // fall back to the normalized line text for legacy plain `- Title` or `- id` entries.
+      const knownIds = new Set<string>();
+      for (const m of catContent.matchAll(/^- (.+)$/gm)) {
+        const line = m[1].trim();
+        const linkMatch = line.match(/^\[([^\]]+)\]\(([^)]+)\.md\)$/);
+        if (linkMatch) {
+          knownIds.add(linkMatch[2].trim().toLowerCase());
+        } else {
+          knownIds.add(line.toLowerCase().replace(/\s+/g, '-'));
         }
       }
 
-      for (const actual of catFiles) {
-        const actualId = actual.replace('.md', '');
-        // Check if actualId appears in the index (by title or by id)
-        const indexLines = Array.from(catContent.matchAll(/^- (.+)$/gm)).map(m => m[1].trim());
-        const foundInIndex = indexLines.some(line => {
-          const normalizedLine = line.toLowerCase().replace(/\s+/g, '-');
-          return normalizedLine === actualId.toLowerCase();
-        });
-        if (!foundInIndex) {
-          orphans.push(`wiki/${category}/${actual}`);
+      // Build alias set for each on-disk file: filename, frontmatter id, frontmatter title.
+      const fileAliases = new Map<string, Set<string>>();
+      for (const fileName of catFiles) {
+        const filePath = path.join(catDir, fileName);
+        const filenameId = fileName.replace('.md', '');
+        const aliases = new Set<string>([filenameId.toLowerCase()]);
+        try {
+          const content = fs.readFileSync(filePath, 'utf8');
+          const fmMatch = content.match(/---\n([\s\S]*?)\n---/);
+          if (fmMatch) {
+            const idMatch = fmMatch[1].match(/^id:\s*"?([^"\n]+)"?/m);
+            if (idMatch) aliases.add(idMatch[1].trim().toLowerCase());
+            const titleMatch = fmMatch[1].match(/^title:\s*"?([^"\n]+)"?/m);
+            if (titleMatch) {
+              aliases.add(titleMatch[1].trim().toLowerCase().replace(/\s+/g, '-'));
+            }
+          }
+        } catch {
+          // unreadable file: only filename alias is available
+        }
+        fileAliases.set(filenameId, aliases);
+      }
+
+      // Missing: INDEX lists an id that no on-disk file matches (via any alias).
+      for (const known of knownIds) {
+        const found = Array.from(fileAliases.values()).some(aliases => aliases.has(known));
+        if (!found) {
+          missing.push(`wiki/${category}/${known}.md`);
+        }
+      }
+
+      // Orphan: on-disk file whose none of its aliases appears in the INDEX.
+      for (const [filenameId, aliases] of fileAliases) {
+        const found = Array.from(aliases).some(a => knownIds.has(a));
+        if (!found) {
+          orphans.push(`wiki/${category}/${filenameId}.md`);
         }
       }
 
@@ -506,14 +532,17 @@ tags: []
       const lines = files.map(f => {
         const content = fs.readFileSync(path.join(catDir, f), 'utf8');
         const frontmatterMatch = content.match(/---\n([\s\S]*?)\n---/);
+        let title: string | null = null;
+        let id: string | null = null;
         if (frontmatterMatch) {
-          const titleMatch = frontmatterMatch[1].match(/title: "([^"]+)"/);
-          if (titleMatch) return `- ${titleMatch[1]}`;
-          // Try without quotes
-          const unquotedMatch = frontmatterMatch[1].match(/title: (.+)/);
-          if (unquotedMatch) return `- ${unquotedMatch[1].trim()}`;
+          const idMatch = frontmatterMatch[1].match(/^id:\s*"?([^"\n]+)"?/m);
+          if (idMatch) id = idMatch[1].trim();
+          const titleMatch = frontmatterMatch[1].match(/^title:\s*"?([^"\n]+)"?/m);
+          if (titleMatch) title = titleMatch[1].trim();
         }
-        return `- ${f.replace('.md', '')}`;
+        const safeTitle = title || f.replace('.md', '');
+        const safeId = id || f.replace('.md', '');
+        return `- [${safeTitle}](${safeId}.md)`;
       });
       const index = `# ${category}\n\n${lines.join('\n') || 'No entries yet.'}`;
       fs.writeFileSync(path.join(catDir, 'INDEX.md'), index, 'utf8');

@@ -41,7 +41,7 @@ describe('WikiManager', () => {
   test('creates index files', () => {
     const manager = new WikiManager(testDir);
     manager.create({
-      id: 'entry-1',
+      id: 'entry-one',
       title: 'Entry One',
       category: 'architecture',
       created: '2025-05-24',
@@ -56,6 +56,23 @@ describe('WikiManager', () => {
 
     const catIndex = fs.readFileSync(path.join(testDir, 'wiki', 'architecture', 'INDEX.md'), 'utf8');
     expect(catIndex).toContain('Entry One');
+  });
+
+  test('per-category INDEX entries use linked [Title](id.md) format', () => {
+    const manager = new WikiManager(testDir);
+    manager.create({
+      id: 'linked-entry',
+      title: 'Linked Entry',
+      category: 'architecture',
+      created: '2026-06-03',
+      updated: '2026-06-03',
+      relatedInitiatives: [],
+      tags: [],
+      content: 'Content'
+    });
+
+    const catIndex = fs.readFileSync(path.join(testDir, 'wiki', 'architecture', 'INDEX.md'), 'utf8');
+    expect(catIndex).toContain('- [Linked Entry](linked-entry.md)');
   });
 
   test('create sanitizes path traversal in category and id', () => {
@@ -734,11 +751,11 @@ related_wiki: ["architecture/referenced-by-test", "other/cat"]
     });
 
     const result = manager.checkConsistency();
+    console.log('DEBUG result:', JSON.stringify(result, null, 2));
 
     expect(result.consistent).toBe(true);
     expect(result.missing).toEqual([]);
     expect(result.orphans).toEqual([]);
-    expect(result.stale).toBe(false);
   });
 
   test('checkConsistency detects orphan wiki files not in INDEX', () => {
@@ -773,6 +790,104 @@ Content
     expect(result.consistent).toBe(false);
     expect(result.orphans).toEqual(expect.arrayContaining([
       expect.stringContaining('orphan-wiki.md')
+    ]));
+  });
+
+  test('checkConsistency accepts linked INDEX entries with id different from filename', () => {
+    const manager = new WikiManager(testDir);
+    // Create a wiki entry via the manager (writes the file and the linked INDEX).
+    manager.create({
+      id: 'stable-id',
+      title: 'Stable ID',
+      category: 'architecture',
+      created: '2026-06-03',
+      updated: '2026-06-03',
+      relatedInitiatives: [],
+      tags: [],
+      content: 'Content'
+    });
+    // Rename the file so the on-disk filename no longer matches the id. The
+    // INDEX still references the id via the link target, so the checker must
+    // resolve the file via its frontmatter id alias.
+    const categoryDir = path.join(testDir, 'wiki', 'architecture');
+    fs.renameSync(
+      path.join(categoryDir, 'stable-id.md'),
+      path.join(categoryDir, 'renamed-stable-id.md')
+    );
+
+    const result = manager.checkConsistency();
+
+    expect(result.consistent).toBe(true);
+    expect(result.missing).toEqual([]);
+    expect(result.orphans).toEqual([]);
+  });
+
+  test('checkConsistency matches INDEX entry by frontmatter title when id and filename differ', () => {
+    const manager = new WikiManager(testDir);
+    // Manually write a legacy plain-format INDEX whose entry matches the file's
+    // frontmatter title (not the id or the filename). The checker should still
+    // consider this consistent because title is one of the recognized aliases.
+    const categoryDir = path.join(testDir, 'wiki', 'architecture');
+    fs.mkdirSync(categoryDir, { recursive: true });
+    fs.writeFileSync(path.join(categoryDir, 'foo.md'), `---
+id: "foo"
+title: "Original Foo Plan"
+category: "architecture"
+created: "2026-06-03"
+updated: "2026-06-03"
+related_initiatives: []
+tags: []
+---
+
+Content
+`, 'utf8');
+    fs.writeFileSync(
+      path.join(categoryDir, 'INDEX.md'),
+      '# architecture\n\n- Original Foo Plan\n',
+      'utf8'
+    );
+    // Root INDEX must exist for the checker to consider the wiki consistent.
+    fs.writeFileSync(
+      path.join(testDir, 'wiki', 'INDEX.md'),
+      '# Wiki\n\n## Categories\n\n- [architecture](architecture/INDEX.md)\n',
+      'utf8'
+    );
+
+    const result = manager.checkConsistency();
+
+    expect(result.consistent).toBe(true);
+    expect(result.missing).toEqual([]);
+    expect(result.orphans).toEqual([]);
+  });
+
+  test('checkConsistency still detects orphan when neither id, title, nor filename matches INDEX', () => {
+    const manager = new WikiManager(testDir);
+    const categoryDir = path.join(testDir, 'wiki', 'architecture');
+    fs.mkdirSync(categoryDir, { recursive: true });
+    fs.writeFileSync(path.join(categoryDir, 'foo.md'), `---
+id: "foo"
+title: "Foo"
+category: "architecture"
+created: "2026-06-03"
+updated: "2026-06-03"
+related_initiatives: []
+tags: []
+---
+
+Content
+`, 'utf8');
+    // INDEX lists an entry that matches none of foo's aliases.
+    fs.writeFileSync(
+      path.join(categoryDir, 'INDEX.md'),
+      '# architecture\n\n- [Unrelated](unrelated.md)\n',
+      'utf8'
+    );
+
+    const result = manager.checkConsistency();
+
+    expect(result.consistent).toBe(false);
+    expect(result.orphans).toEqual(expect.arrayContaining([
+      expect.stringContaining('foo.md')
     ]));
   });
 

@@ -1,3 +1,3 @@
 # roadmap
 
-- Philosophy Alignment Roadmap
+- [Philosophy Alignment Roadmap](philosophy-alignment-roadmap.md)
