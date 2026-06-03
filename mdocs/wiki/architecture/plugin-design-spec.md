@@ -3,8 +3,8 @@ id: plugin-design-spec
 title: Original Plugin Design Spec
 category: architecture
 created: 2026-05-27
-updated: 2026-06-01
-related_initiatives: [install-mdocs, align-implementation-with-philosophy, fix-local-dogfooding-agent-discovery, fix-v1-opencode-compatibility]
+updated: 2026-06-03
+related_initiatives: [install-mdocs, align-implementation-with-philosophy, fix-local-dogfooding-agent-discovery, fix-v1-opencode-compatibility, evaluate-pr-3-wiki-orphan-fix]
 tags: [blueprint, architecture, design, history]
 lifecycle: stable
 knowledge_type: historical-blueprint
@@ -117,11 +117,53 @@ created: 2025-05-24
 updated: 2025-05-24
 related_initiatives: [add-authentication-system]
 tags: [plugin, architecture]
+lifecycle: stable              # optional: draft | stable | superseded | needs-review
+knowledge_type: architecture   # optional: architecture | decision | how-to | reference | roadmap | note
+confidence: high               # optional: low | medium | high
+source_initiatives: [id-a, id-b]  # optional: which initiatives produced this knowledge
+supersedes: [older-entry-id]    # optional: which entry this replaces
+related_wiki: [sibling-id]     # optional: cross-references to other wiki entries
 ---
 
 ## Overview
 The plugin follows a plugin-centric architecture...
 ```
+
+**Field reference** (full `WikiEntry` schema in `src/types.ts`):
+
+| Field | Type | Notes |
+|---|---|---|
+| `id`, `title`, `category`, `created`, `updated` | string | Required. `category` becomes the wiki subdirectory. |
+| `related_initiatives` | string[] | Optional. Backlinks from this entry to initiatives. Does **not** silence orphan warnings by itself — only an initiative's `related_wiki` array pointing back to this entry counts as a real reference. |
+| `tags` | string[] | Optional. Used by full-text search and initiative matching. |
+| `lifecycle` | enum | Optional. `draft` \| `stable` \| `superseded` \| `needs-review`. The linter uses `stable` to identify settled learnings; `validate()` also uses it as an opt-out from the orphan check (see Orphan Detection below). |
+| `knowledge_type` | enum | Optional. Used for filtering and display. |
+| `confidence` | enum | Optional. `low` \| `medium` \| `high`. |
+| `source_initiatives` | string[] | Optional. Provenance: which initiatives produced this knowledge. Synonym: `sources` (see below). |
+| `sources` | string[] | Optional. Alias for `source_initiatives`. Useful for human authors who prefer the shorter name; the parser accepts either. |
+| `supersedes` | string[] | Optional. Forward reference to entries this one replaces. |
+| `related_wiki` | string[] | Optional. Cross-references to sibling wiki entries (category/id pairs). |
+
+### Orphan Detection
+
+`WikiManager.validate()` flags any wiki entry that is not referenced by any initiative. An entry is considered **referenced** if **any** of the following holds:
+
+1. Some initiative's `related_wiki` array contains this entry's `category/id` pair (the canonical bidirectional link).
+2. The entry itself has a non-empty `source_initiatives` (or `sources`) field.
+3. The entry has `lifecycle: stable` — interpreted as "settled knowledge that stands on its own."
+4. The entry's `category` is listed in the constructor's `standaloneCategories` option — interpreted as a project-wide category exempt from initiative anchoring.
+
+Configured example (programmatic consumers):
+
+```ts
+import { createPlugin } from 'opencode-mdocs';
+
+const plugin = createPlugin(baseDir, {
+  standaloneCategories: ['repo', 'system', 'glossary']
+});
+```
+
+The default has no standalone categories — the option must be supplied explicitly to opt in.
 
 ### Indices
 

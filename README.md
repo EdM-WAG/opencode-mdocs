@@ -192,7 +192,7 @@ tags: [plugin, architecture]
 The plugin follows a plugin-centric architecture...
 ```
 
-Wiki entries can also use `sources: [initiative-id]` or `source_initiatives: [initiative-id]` to record provenance. Settled standalone knowledge should set `lifecycle: stable`; validation will not warn when stable entries are not referenced by an initiative. Programmatic consumers can also pass `{ standaloneCategories: ['repo'] }` to `createPlugin(...)` or `new WikiManager(...)` for project-specific standalone categories.
+Wiki entries accept both `sources: [initiative-id]` and `source_initiatives: [initiative-id]` for provenance (the two are interchangeable aliases). Two mechanisms suppress the "not referenced by any initiative" orphan warning: set `lifecycle: stable` on an individual entry to mark it as settled knowledge that stands alone, or pass `standaloneCategories` (e.g. `['repo', 'system']`) to `createPlugin(...)` or `new WikiManager(...)` to mark an entire category as project-wide. See the Wiki Entry Format section of `mdocs/wiki/architecture/plugin-design-spec.md` for the full frontmatter schema.
 
 **Wiki stub generation** — When an initiative references a wiki entry that doesn't exist yet, the `wiki.stub` command auto-creates it with a default template (Overview, Details, References sections). This prevents broken links and gives agents a starting point for documentation.
 
