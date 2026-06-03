@@ -29,7 +29,7 @@
 - **Fix mdocs_status Tool Error** (done) — fix-mdocs-status-error--2026-05-27.md — 2026-05-27 — [bug, plugin, tools]
 - **Fix Initiative Filename/Slug UX Issues** (done) — fix-slug-initiative-ux--2026-05-29.md — 2026-05-29 — [bug, ux, initiatives, filename, slug, discovery]
 - **Fix v1 opencode Plugin Compatibility** (done) — fix-v1-opencode-compatibility--2026-05-28.md — 2026-05-28 — [bug, compatibility, v1, plugin, config, agent, tools]
-- **Fix Wiki INDEX Consistency Check False Positives** (active) — fix-wiki-index-consistency-check--2026-06-03.md — 2026-06-03 — []
+- **Fix Wiki INDEX Consistency Check False Positives** (done) — fix-wiki-index-consistency-check--2026-06-03.md — 2026-06-03 — []
 - **Install and Configure opencode-mdocs** (done) — install-and-configure-opencode-mdocs--2026-05-27.md — 2026-05-27 — [setup, plugin]
 - **Grant Agent Autonomy Over mdocs Knowledge** (done) — mdocs-autonomy--2026-05-27.md — 2026-05-27 — [enhancement, workflow, permissions]
 - **Prepare v1.1.0 Release** (done) — prepare-v1-1-0-release--2026-05-31.md — 2026-05-31 — [release, v1.1.0]
