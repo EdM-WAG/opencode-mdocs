@@ -1,15 +1,15 @@
 ---
 id: "fix-v1-3-0-agent-discovery-regression"
 title: "Fix v1.3.0 Agent Discovery Regression"
-status: "active"
+status: "done"
 created: "2026-06-03"
 updated: "2026-06-03"
 owner: "bbaaxx"
 tags: ["bug","release-regression","v1.3.0","opencode","agent","packaging"]
 related_wiki: ["developer/opencode-custom-tool-result-contract","architecture/plugin-design-spec","release/v1-3-0-readiness"]
 priority: "medium"
-phase: "implementation"
-next_action: "Prepare v1.3.1 patch release metadata and run full verification."
+phase: "done"
+next_action: "No follow-up required; v1.3.1 is published and released."
 ---
 
 ## Objective
@@ -22,10 +22,12 @@ Reproduce and fix the v1.3.0 upgrade regression where the Mdocs-Orchestrator age
 - [x] Implement the smallest compatible fix while preserving public API imports and runtime custom tools
 - [x] Add regression tests for package consumer config and agent registration
 - [x] Verify npm-style package install, opencode debug agent listing, tests, build, pack, and mdocs validation
-- [ ] Document findings and prepare patch release recommendation
+- [x] Document findings and prepare patch release recommendation
 
 ## Progress Log
 - [2026-06-03T19:41:14.083Z] Created initiative via mdocs command
 - [2026-06-03T19:45:00Z] Reproduced regression: clean fixture with opencode-mdocs@1.3.0 and existing config plugin:["opencode-mdocs"] fails plugin load with `Cannot call a class constructor WikiManager without |new|`, so `mdocs-orchestrator` is not found. Clean fixture with v1.2.0 under current opencode showed the same root export-loader failure, suggesting the user's successful revert likely involved a different config/path or cached local agent; nevertheless the v1.3.0 regression is real for existing root config. Verified `opencode-mdocs/plugin` is not accepted by opencode's npm plugin installer. Implemented fix: package root now exposes only default plugin; public API moved to `opencode-mdocs/api`; README restored consumer config to `plugin:["opencode-mdocs"]`; regression tests added. Packed local build and verified patched `dist/index.js` lists `mdocs-orchestrator` and registers mdocs tools.
+- [2026-06-03T19:50:00Z] Completed v1.3.1 patch release for the agent discovery regression. Commit 3d52ba2 was tagged as v1.3.1 and pushed. User published npm package with 2FA; verified npm view opencode-mdocs version = 1.3.1. Created GitHub release https://github.com/bbaaxx/opencode-mdocs/releases/tag/v1.3.1. Verification evidence before publish: full tests passed (11 suites / 180 tests), build clean, packed artifact smoke test passed, patched root plugin lists mdocs-orchestrator via opencode debug, mdocs_validate clean, mdocs_index_check consistent.
+- [2026-06-03T20:09:24.082Z] Marked done via mdocs command
 
 ## Artifacts
