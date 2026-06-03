@@ -12,6 +12,7 @@ coverage/
 
 # Runtime workflow state — regenerated on each session
 mdocs/.workflow-state.json
+mdocs/.index-meta.json
 
 # opencode runtime files (but keep agent symlink)
 .opencode/node_modules/

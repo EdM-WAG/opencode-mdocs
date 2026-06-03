@@ -12,6 +12,7 @@
 - **Fix Local Dogfooding Agent and Skills Discovery** (done) — fix-local-dogfooding-agent-discovery--2026-05-27.md — 2026-05-27 — [bug, dogfooding, local-development, agent, config]
 - **Add mdocs Linter for Handoff Quality Gates** (done) — add-mdocs-linter-for-handoff-quality--2026-05-27.md — 2026-05-27 — [enhancement, quality, automation, linting]
 - **Add opencode-mdocs to OpenCode Ecosystem Directory** (active) — add-opencode-mdocs-to-opencode-ecosystem--2026-05-31.md — 2026-05-31 — [documentation, opencode, ecosystem, pr, directory]
+- **Evaluate and Merge PR #3: Wiki Orphan Warning Fix** (active) — evaluate-pr-3-wiki-orphan-fix--2026-06-03.md — 2026-06-03 — []
 - **Add Validation for Initiatives and Wiki References** (done) — add-initiatives-wiki-validation--2026-05-29.md — 2026-05-29 — [enhancement, validation, initiatives, wiki, integrity]
 - **Add Cross-Link Graph Linter Rules** (done) — add-cross-link-graph-linter--2026-05-28.md — 2026-05-28 — [phase-1, linter, graph, links, quality]
 - **Add Audit Log and Event History** (done) — add-audit-log-and-event-history--2026-05-27.md — 2026-05-27 — [enhancement, observability, history]
